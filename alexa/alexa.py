@@ -7,7 +7,7 @@ import pyjokes
 
 listener = sr.Recognizer()
 engine = pyttsx3.init()
-engine.setProperty('rate', 200)
+engine.setProperty('rate', 150)
 engine.setProperty('volume', 0.7)
 voices = engine.getProperty('voices')
 engine.setProperty('voice', voices[0].id)
@@ -15,7 +15,7 @@ engine.setProperty('voice', voices[0].id)
 
 def talk(text):
     engine.say(text)
-    engine.runAndWait()
+    engine.runAndWait(10)
 
 def take_command():
     try:
@@ -26,24 +26,10 @@ def take_command():
             command = command.lower()
             if 'alexa' in command:
                 command = command.replace('alexa', '')
-                talk(command)
+                #talk(command)
     except:
         pass
     return command
-def take_command_of_message():
-    try:
-        with sr.Microphone() as source:
-            print('Listening...')
-            voice = listener.listen(source)
-            command = listener.recognize_google(voice)
-            command = command.lower()
-            if 'alexa' in command:
-                command = command.replace('alexa', '')
-                talk(command)
-    except:
-        pass
-    return command
-
 
 def run_alexa():
     command = take_command()
@@ -67,18 +53,9 @@ def run_alexa():
         talk('no i am in a relationship with wifi')
     elif 'joke' in command:
         talk(pyjokes.get_joke())
-    elif 'send whatsapp message' in command:
-        talk("tell me the number on which you want to send message")
-        number = take_command()
-        phonenumber = '+91' + number
-        talk("tell me the message which you want to send")
-        message = take_command_of_message()
-        talk("tell me the at what time you want to send the message, in hours")
-        hour = take_command_of_message()
-        talk("tell me the minute now")
-        minute = take_command_of_message()
-        pywhatkit.sendwhatmsg(phonenumber, message, hour, minute)
     else:
         talk('please speak again')
+
+
 while True:
     run_alexa()
